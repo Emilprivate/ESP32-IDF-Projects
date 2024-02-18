@@ -101,9 +101,11 @@ This script `GenerateScripts.sh` helps you generate shell scripts (`merge.sh`, `
 
 3. **Generated Scripts:**
    - Upon providing the information, the script will generate three shell scripts:
-     - `merge.sh`: Merges bins using the provided information.
+     - `build-merge.sh`: Builds the project using "idf.py build" and merges bins using the provided information. Also saves the information in a config.json file. 
      - `run.sh`: Runs the merged bin file normally in QEMU.
      - `debug.sh`: Runs the merged bin file in QEMU for debugging purposes.
+     - `assemble.sh`: Assembles a `.s` file utilizing xtensa assembler.
+     - `disassemble.sh`: Disassembles a `.elf` file utilizing xtensa disassembler.
 
 4. **Execute Scripts:**
    - If execute permissions are for some reason not given then make sure to grant execute permissions manually to the generated scripts using `chmod +x merge.sh run.sh debug.sh`.
