@@ -1,0 +1,31 @@
+Merge bins:
+python /opt/esp/idf/components/esptool_py/esptool/esptool.py --chip esp32 merge_bin --output output.bin --fill-flash-size 4MB 0x1000 build/bootloader/bootloader.bin 0x8000 build/partition_table/partition-table.bin 0x10000 build/main.bin --flash_mode dio --flash_freq 40m --flash_size 4MB
+
+Run normally:
+qemu-system-xtensa -nographic -machine esp32 -drive file=output.bin,if=mtd,format=raw
+
+Debug:
+qemu-system-xtensa -s -S -nographic -machine esp32 -drive file=output.bin,if=mtd,format=raw
+
+Fix devcontainer.json so it can detect the compiler when inside the docker container:
+	"containerEnv": {
+        "PATH": "/opt/esp/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin:${env:PATH}"
+    }
+
+Fix launch.json to attach to the debugger:
+- Native Debug (GDB, LLDB & MAGO-MI Debugger support) extension
+launch.json extension:
+    {
+      "type": "gdb",
+      "gdbpath": "/opt/esp/tools/xtensa-esp-elf-gdb/12.1_20231023/xtensa-esp-elf-gdb/bin/xtensa-esp32-elf-gdb",
+      "request": "attach",
+      "name": "Attach to QEMU",
+      "executable": "${workspaceFolder}/build/main.elf",
+      "target": ":1234",
+      "remote": true,
+      "cwd": "${workspaceRoot}",
+      "valuesFormatting": "parseText"
+    },
+
+Shortcuts for merge/run/debug commands: (doesnt work)
+- make 3 .sh files with each command in it.
