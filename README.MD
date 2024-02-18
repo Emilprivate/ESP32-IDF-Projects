@@ -6,6 +6,7 @@ This guide will walk you through setting up the ESP-IDF (Espressif IoT Developme
 
 1. **Install Visual Studio Code Extension:**
    - Install the [ESP-IDF Visual Studio Code Extension](https://marketplace.visualstudio.com/items?itemName=espressif.esp-idf-extension) from the Visual Studio Code Marketplace.
+   - Native Debug (GDB, LLDB & MAGO-MI Debugger support) extension
 
 2. **Install Prerequisites:**
    - Follow the prerequisite instructions outlined in the official ESP-IDF documentation [here](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/linux-macos-setup.html#step-1-install-prerequisites).
