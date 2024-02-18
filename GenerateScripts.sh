@@ -37,10 +37,31 @@ else
 fi
 
 # Convert ELF to binary format and place it in the specified output directory
-xtensa-esp32-elf-objcopy -O binary asm-build/"$filename".elf "$bin_output_dir/$filename".bin
+bin_file="$bin_output_dir/$filename.bin"
+xtensa-esp32-elf-objcopy -O binary asm-build/"$filename".elf "$bin_file"
+
+# Ask if the user wants to pad the binary file
+echo "Do you want to pad the binary file to a valid flash size (2, 4, 8, 16 MB)? (yes/no)"
+read -r pad_binary
+
+if [ "$pad_binary" = "yes" ]; then
+    echo "Enter the desired flash size in MB (2, 4, 8, 16):"
+    read -r flash_size
+
+    # Calculate the padding size in bytes
+    let pad_size=flash_size*1024*1024
+
+    # Create a padded binary file
+    padded_bin_file="$bin_output_dir/padded_$filename.bin"
+    dd if=/dev/zero bs=1 count="$pad_size" of="$padded_bin_file" status=none
+    dd if="$bin_file" of="$padded_bin_file" conv=notrunc status=none
+
+    echo "Binary file padded to $flash_size MB and located in $bin_output_dir/"
+else
+    echo "Binary file located in $bin_output_dir/"
+fi
 
 echo "Assembled and linked files located in asm-build/"
-echo "Binary file located in $bin_output_dir/"
 EOF
 
 
