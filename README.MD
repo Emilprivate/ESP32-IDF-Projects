@@ -114,5 +114,7 @@ This script `GenerateScripts.sh` helps you generate shell scripts (`merge.sh`, `
 ## Note
 - Ensure that QEMU and the required tools are properly set up on your system before using the generated scripts.
 
-
-
+# To compile the assembly (.s)
+- To compile the assembly file together with the object, linked and binary files, add the following CMake line to the component CMake file that you wish to output the assembly for:
+`set_target_properties(${COMPONENT_LIB} PROPERTIES COMPILE_FLAGS "-save-temps=obj")`
+- The output directory of the assembly file (.s) = `build/esp-idf/<path>/CMakeFiles/__idf_<path>.dir/<file>.c.s`
