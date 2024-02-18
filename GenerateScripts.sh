@@ -51,12 +51,17 @@ if [ "$pad_binary" = "yes" ]; then
     # Calculate the padding size in bytes
     let pad_size=flash_size*1024*1024
 
+    # Use a more efficient block size for dd and adjust count accordingly
+    block_size=4096
+    let count=pad_size/block_size
+
     # Create a padded binary file
-    padded_bin_file="$bin_output_dir/padded_$filename.bin"
-    dd if=/dev/zero bs=1 count="$pad_size" of="$padded_bin_file" status=none
+    padded_bin_file="$bin_output_dir/$filename.bin" # Use the same name to overwrite original
+    dd if=/dev/zero bs=$block_size count=$count of="$padded_bin_file" status=none
     dd if="$bin_file" of="$padded_bin_file" conv=notrunc status=none
 
     echo "Binary file padded to $flash_size MB and located in $bin_output_dir/"
+    bin_file="$padded_bin_file" # Update bin_file variable to point to the padded version
 else
     echo "Binary file located in $bin_output_dir/"
 fi
