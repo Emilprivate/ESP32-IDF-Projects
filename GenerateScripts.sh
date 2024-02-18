@@ -14,18 +14,33 @@ read -r asm_path
 filename=$(basename -- "$asm_path")
 filename=${filename%.*}
 
-# Ensure the asm-build and bin directories exist
-mkdir -p asm-build bin
+# Ensure the asm-build directory exists
+mkdir -p asm-build
 
 # Assemble and link
 xtensa-esp32-elf-as -o asm-build/"$filename".o "$asm_path"
 xtensa-esp32-elf-ld -o asm-build/"$filename".elf asm-build/"$filename".o
 
-# Convert ELF to binary format and place it in the bin directory
-xtensa-esp32-elf-objcopy -O binary asm-build/"$filename".elf bin/"$filename".bin
+# Ask the user if they want to change the output directory for the .bin file
+echo "Change output directory for the .bin file? (yes/no)"
+read -r change_output_dir
+
+if [ "$change_output_dir" = "yes" ]; then
+    echo "Enter the new output directory path:"
+    read -r bin_output_dir
+    # Ensure the new output directory exists
+    mkdir -p "$bin_output_dir"
+else
+    bin_output_dir="bin"
+    # Ensure the default bin directory exists
+    mkdir -p "$bin_output_dir"
+fi
+
+# Convert ELF to binary format and place it in the specified output directory
+xtensa-esp32-elf-objcopy -O binary asm-build/"$filename".elf "$bin_output_dir/$filename".bin
 
 echo "Assembled and linked files located in asm-build/"
-echo "Binary file located in bin/"
+echo "Binary file located in $bin_output_dir/"
 EOF
 
 
